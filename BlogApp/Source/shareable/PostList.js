@@ -6,8 +6,9 @@ import { getDataJSON, storeDataJSON } from "../Function/AsyncStorageFunction";
 import { Zocial } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
-
-
+import {AuthContext} from '../provider/AuthProvider';
+import * as firebase from 'firebase'
+import "firebase/firestore";
 
 const PostList =(props)=>{
    
@@ -16,26 +17,23 @@ const PostList =(props)=>{
     const currUser=props.currentUser
   
 
-    const [Name, setName] = useState("");
-    const [iconName,setIconName]=useState("hearto")
-    const [loading, setLoading] = useState(true);
-    const [likeCount,setLikeCount]=useState(0)
-    const [commentCount,setCommentCount]=useState(0)
-    const [comments,setComments]= useState([]);
     
+    const [iconName,setIconName]=useState("hearto")
    
+    const [likeCount,setLikeCount]=useState(posts.data.likes)
     const [authorPostReactions, setAuthorPostReactions] = useState([]);
-    const [liker, setLikers] = useState([]);
+    
 
     let dateObj=new Date(posts.data.created_at.seconds*1000)
-    console.log(dateObj.toUTCString())
+  
     dateObj=""+dateObj.toUTCString()
 
     
     
     let postDate=dateObj.substr(0,dateObj.length-13)
+   
   
-    if(loading){
+    
     return(
         
        
@@ -48,46 +46,49 @@ const PostList =(props)=>{
           
            <FontAwesome name="comment-o" size={27} color="#fc6a03"  style={styles.commentStyle}
            onPress={function(){
-            nav.navigation.navigate("IndivialPost",  {posts,Name,comments,likeCount,commentCount,authorPostReactions,currUser} );
+            nav.navigation.navigate("IndivialPost",  {posts,currUser,postDate} );
            
-            console.log("commento")
-            console.log(likeCount+" pera nai"+ commentCount)
+           
            }}/>
 
           
            <AntDesign name={iconName} size={24} color="#fc4601"  style={styles.likeStyle} 
            onPress ={function(){
             setIconName("heart")
-            //console.log(authorPostReactions.length+" length")
-           // console.log(liker)
+           
+           firebase.firestore().collection("posts").doc(posts.id).collection("likers").doc(currUser.uid).set({
+               liker:currUser.displayName
+           })
+           firebase.firestore().collection("posts").doc(posts.id).update({
+               likes:likeCount+1
+           })
+           firebase.firestore().collection("notifications").doc(posts.data.userId).collection("notification_details").add({
+            post:posts,
+            name:currUser.displayName,
+            body:"liked your post"
+        })
             let a=likeCount+1
-            let authorPostCurrentReaction={postId:posts.key,reactor:currUser,status:"like"}
-            authorPostReactions.push(authorPostCurrentReaction)
-            storeDataJSON(posts.Email+"Reaction",authorPostReactions)
-            liker.push(currUser)
+            
             setLikeCount(a)
-            storeDataJSON(posts.key+"likes",liker)
+            
            
             
             
            }}/>
           
         <Text style={styles.likeTextStyle} >{likeCount} Likes</Text>
-        <Text style={styles.commentTextStyle}>{commentCount} Comments</Text>
+        <Text style={styles.commentTextStyle}>{posts.data.comments} Comments</Text>
           
    
            
 
        </PostCard>
-    )
-    }
-    else{
-        return(
-            <View style={{ flex: 1, justifyContent: "center" }}>
-            <ActivityIndicator size="large" color="red" animating={true} />
-          </View>
-        )
-    }
+  
+
+
+);
+  
+    
 }
 
 const styles=StyleSheet.create({

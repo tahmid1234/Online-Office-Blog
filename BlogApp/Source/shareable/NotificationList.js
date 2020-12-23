@@ -12,34 +12,35 @@ const NotificationList=(props)=>{
     const nav=props.nav
     const [iconName,setIconName]=useState("heart")
     const [statement ,setStatement]=useState("liked your post")
-    const [check,setCheck]=useState(false)
+    
     console.log(notification.status)
    
 
     const checkNotificationStatus=()=>{
 
-        if(notification.status==="comment"){
+        if(notification.data.body[0]==="c" || notification.data.body[0]==="r" ){
         setIconName("comments")
         setStatement("commented on your post")
         }
         
-        setCheck(true)
+     
 
     }
-    console.log(notification.reactor.email);
     
-    if(!check)
-    checkNotificationStatus()
+    
+    useEffect(()=>{
+        checkNotificationStatus()
+    },[])
     return(
         <View>
             
            
             <NotificationCard>
-            <Text style={{width:60}}>a</Text>
+            <Text style={{width:60}}>" "</Text>
             <FontAwesome name={iconName} size={20} color="#fc6a03"  />
-                <Text style={styles.commenter}>{notification.reactor.name} </Text>
+                <Text style={styles.commenter}>{notification.data.name} </Text>
                 <Text></Text>
-                <Text style = {styles.stateMentStyle}>{statement} </Text>
+                <Text style = {styles.stateMentStyle}>{notification.data.body} </Text>
             </NotificationCard>
         </View>
        

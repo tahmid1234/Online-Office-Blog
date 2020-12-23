@@ -2,25 +2,25 @@ import React , { useState, useEffect }  from 'react'
 import {View,Button,Flatlist,Text,ActivityIndicator,StyleSheet,TouchableOpacity} from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {CommentCard} from '../shareable/customCard'
+import convertSecons from '../Function/SeconsToUtcDate'
 
 const CommentList=(props)=>{
-    const comment=props.comment
-    const commenter=comment.commenter
-    const commentBody=comment.commentBody
-    const date=comment.commentDate
-    console.log(commentBody+" laal")
+    const comment=props.comments
+   
+    
+    
     return(
         <View>
              <MaterialCommunityIcons name="human-greeting" size={36} color="#fc6a03" style={styles.iconStyle}/>
            
         <CommentCard>
            
-            <Text style={styles.CommenterStyle}>{commenter.name}</Text>
+            <Text style={styles.CommenterStyle}>{comment.data.writer}</Text>
            
            
            
-            <Text style={styles.postBodeStyle}>{commentBody} </Text>
-            <Text style={styles.dateStyle}> {date} </Text>
+            <Text style={styles.postBodeStyle}>{comment.data.comment_body} </Text>
+            <Text style={styles.dateStyle}> {convertSecons(comment.data.written_at.seconds)}</Text>
 
         </CommentCard>
         </View>

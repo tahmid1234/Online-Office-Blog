@@ -65,7 +65,7 @@ const HomeTabScreen = () => {
       />
       <HomeTab.Screen
         name="Notification"
-        children={()=><NotificationScreenActivity currentUser={auth.CurrentUser} />}
+        component={NotificationScreenActivity}
         options={{
           tabBarLabel: "Notifications",
           tabBarIcon: ({ focused }) =>

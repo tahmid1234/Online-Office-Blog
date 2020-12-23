@@ -16,6 +16,7 @@ import "firebase/firestore";
 
 
 
+
 const HomeScreenActivity=(props)=>{
     
   //console.log(props)
@@ -104,8 +105,8 @@ const HomeScreenActivity=(props)=>{
                      body:RecentPost,
                      author:auth.CurrentUser.displayName,
                      created_at:firebase.firestore.Timestamp.now(),
-                     likes:[],
-                     comments:[],
+                     likes:0,
+                     comments:0,
                    }).then(()=>{
                      setLoading(false)
                      alert("Post Created")
@@ -130,11 +131,10 @@ const HomeScreenActivity=(props)=>{
             renderItem={function({ item } ){
               //console.log("Render")
               //console.log(posts)
-              let dateObj=new Date(item.data.created_at.seconds*1000)
-              console.log(posts.length+" post length")
+             
              
               return (
-                  
+                 
                  <PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
                  
                  )
