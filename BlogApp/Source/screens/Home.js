@@ -11,27 +11,14 @@ import PostList from '../shareable/PostList'
 import * as firebase from 'firebase'
 import "firebase/firestore";
 
-const months={
-    0:"January",
-    1:"February",
-    2:"March",
-    3:"April",
-    4:"May",
-    5:"June",
-    6:"July",
-    7:"August",
-    8:"September",
-    9:"October",
-    10:"November",
-    11:"December",
-}
+
 
 
 
 
 const HomeScreenActivity=(props)=>{
     
-  console.log(props)
+  //console.log(props)
   console.log("okayy")
   const [RecentPost, setRecentPost] = useState("");
   const [posts, setPosts] = useState([]);
@@ -53,6 +40,8 @@ const HomeScreenActivity=(props)=>{
           });
         });
         setPosts(temp_posts);
+        console.log("Temp")
+        console.log(temp_posts)
         setLoading(false);
       })
       .catch((error) => {
@@ -109,7 +98,7 @@ const HomeScreenActivity=(props)=>{
                 onPress={function () {
                   setLoading(true)
                   console.log("dekhi")
-                  console.log(auth.CurrentUser)
+                  //console.log(auth.CurrentUser)
                    firebase.firestore().collection("posts").add({
                      userId:auth.CurrentUser.uid,
                      body:RecentPost,
@@ -132,7 +121,7 @@ const HomeScreenActivity=(props)=>{
            </PostCard>
            
                  
-            {loading?
+            {!loading?
             <FlatList
             
             data={posts}
@@ -141,12 +130,12 @@ const HomeScreenActivity=(props)=>{
             renderItem={function({ item } ){
               //console.log("Render")
               //console.log(posts)
-
-              console.log(posts.length+" post length"+item.data.body)
+              let dateObj=new Date(item.data.created_at.seconds*1000)
+              console.log(posts.length+" post length")
              
               return (
-                  <Text>hello</Text>
-                 //<PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
+                  
+                 <PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
                  
                  )
           }}

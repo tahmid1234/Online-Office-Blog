@@ -18,7 +18,7 @@ const PostList =(props)=>{
 
     const [Name, setName] = useState("");
     const [iconName,setIconName]=useState("hearto")
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [likeCount,setLikeCount]=useState(0)
     const [commentCount,setCommentCount]=useState(0)
     const [comments,setComments]= useState([]);
@@ -27,47 +27,24 @@ const PostList =(props)=>{
     const [authorPostReactions, setAuthorPostReactions] = useState([]);
     const [liker, setLikers] = useState([]);
 
+    let dateObj=new Date(posts.data.created_at.seconds*1000)
+    console.log(dateObj.toUTCString())
+    dateObj=""+dateObj.toUTCString()
 
-    const FindUser=async()=>{
-     
-        let response= await getDataJSON(posts.Email)
-        let postReaction=await getDataJSON(posts.Email+"Reaction")
-        let postLiker=await getDataJSON(posts.key+"likes")
-        let postComments=await getDataJSON(posts.key+"Comment")
-        if(postComments.length>0){
-           // console.log("Key"+posts.key)
-       // console.log(postComments.length)
-                setComments(postComments)
-                setCommentCount(postComments.length)
-        }
-
-        if(postLiker.length>0){
-        setLikeCount(postLiker.length)
-        setLikers(postLiker)
-        setAuthorPostReactions(postReaction)
-        }
-     
-       
-        setName(response.name)
-        setLoading(true)
- 
-    }
-
-
-    if(!loading){
-    FindUser()
-    }
     
     
-    //console.log({Name})
+    let postDate=dateObj.substr(0,dateObj.length-13)
+  
     if(loading){
     return(
+        
        
        <PostCard>
+           
            <Zocial name="statusnet" size={24} color="#fc6a03"  style={styles.iconStyle} />
-           <Text style={styles.authorNameStyle}>{Name}</Text>
-           <Text style={styles.dateStyle}>{posts.postDate}</Text>
-           <Text style={styles.postBodyStyle}>{posts.postText}</Text>
+           <Text style={styles.authorNameStyle}>{posts.data.author}</Text>
+           <Text style={styles.dateStyle}>{postDate}</Text>
+           <Text style={styles.postBodyStyle}>{posts.data.body}</Text>
           
            <FontAwesome name="comment-o" size={27} color="#fc6a03"  style={styles.commentStyle}
            onPress={function(){
