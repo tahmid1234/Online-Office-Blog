@@ -7,10 +7,14 @@ import NotificationList from '../shareable/NotificationList'
 import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase'
 import "firebase/firestore";
+import convertSecons from '../Function/SeconsToUtcDate'
 
 const NotificationScreenActivity=(props)=>{
   console.log("halum halum")
   const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
+  const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+  console.log("Dispaly")
+  const currUser={uid:{uid},displayName:{displayName}}
   
  
   const [notifications, setNotifications] = useState([]);
@@ -72,6 +76,11 @@ const NotificationScreenActivity=(props)=>{
                 <TouchableOpacity
                 onPress={function(){
                   console.log("pressed")
+                 
+                  let posts=item.data.post
+                  let date=convertSecons(posts.data.created_at.seconds)
+                  
+                  props.navigation.navigate("IndivialPost",  {posts,currUser,date} );
                 }}>
                 <NotificationList
                         notificatiions={item} nav={props}

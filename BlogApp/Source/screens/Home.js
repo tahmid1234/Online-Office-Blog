@@ -24,6 +24,7 @@ const HomeScreenActivity=(props)=>{
   const [RecentPost, setRecentPost] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  let ref=""
 
 
   const loadPosts = async () => {
@@ -73,6 +74,7 @@ const HomeScreenActivity=(props)=>{
            <PostCard>
        
            <Input
+            
                 
 
                 inputStyle={{color:"white"}}
@@ -92,11 +94,13 @@ const HomeScreenActivity=(props)=>{
               <View style={styles.buttonView}>
               
               <Button 
+              
               borderRadius={9}
               color="#fc6a03"
               title="Post"
                 titleStyle={{color:"white"}}
                 onPress={function () {
+                  
                   setLoading(true)
                   console.log("dekhi")
                   //console.log(auth.CurrentUser)

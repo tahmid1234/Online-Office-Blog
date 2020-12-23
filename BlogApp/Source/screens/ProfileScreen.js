@@ -22,7 +22,7 @@ const ProfileScreenActivity=(props)=>{
                 <View style={{backgroundColor:"#5730a" ,height:250,borderColor:"#003",borderWidth:2}}>
                
                 <Text style={styles.nameSyle}>{auth.CurrentUser.name} </Text>
-                <Text style={styles.profileInfoStyle} >Office Id is {auth.CurrentUser.sid} </Text>
+                <Text style={styles.profileInfoStyle} >Mr {auth.CurrentUser.displayName} </Text>
                 <Text style={styles.profileInfoStyle}>Works at Dunder Mifflin Paper Company</Text>
                 <Text style={styles.profileInfoStyle} >Scranton Branch</Text>
                 </View>

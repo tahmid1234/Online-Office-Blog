@@ -32,6 +32,7 @@ if(!firebase.apps.length){
 
 const AuthStack= createStackNavigator();
 const HomeStack =createStackNavigator();
+const NotificationStack=createStackNavigator();
 const HomeTab = createMaterialBottomTabNavigator();
 const AppDrawer = createDrawerNavigator();
 
@@ -65,7 +66,7 @@ const HomeTabScreen = () => {
       />
       <HomeTab.Screen
         name="Notification"
-        component={NotificationScreenActivity}
+        component={NotificationStackScreen}
         options={{
           tabBarLabel: "Notifications",
           tabBarIcon: ({ focused }) =>
@@ -86,6 +87,14 @@ const HomeTabScreen = () => {
   );
 };
 
+const NotificationStackScreen=() =>{
+  return(
+    <NotificationStack.Navigator initialRouteName="Notification">
+      <NotificationStack.Screen name="Notification" component={NotificationScreenActivity}  options={{ headerShown: false }}/>
+      <NotificationStack.Screen name="IndivialPost" component={IndividualPostScreen}  options={{ headerShown: false }}/>
+    </NotificationStack.Navigator>
+  )
+}
 
 const HomeStackScreen=() =>{
   return(

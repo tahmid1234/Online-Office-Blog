@@ -13,7 +13,7 @@ const NotificationList=(props)=>{
     const [iconName,setIconName]=useState("heart")
     const [statement ,setStatement]=useState("liked your post")
     
-    console.log(notification.status)
+   
    
 
     const checkNotificationStatus=()=>{

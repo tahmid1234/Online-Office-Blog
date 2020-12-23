@@ -52,7 +52,7 @@ const IndividualPostScreen=(props)=>{
               });
             });
             setComments(temp_comments);
-           
+           console.log(temp_comments)
             setLoading(false);
           })
           .catch((error) => {
@@ -66,18 +66,7 @@ const IndividualPostScreen=(props)=>{
         loadComments();
       }, []);
     
-    /*const post=props.route.params.posts
-    const authorName=props.route.params.Name
-    const currentUser=props.route.params.currUser
-    
-    
-    const [likeCount,setLikeCount]=useState(props.route.params.likeCount)
-    const[comments,setComments]=useState(props.route.params.comments)
-    const [currentInputText,setCurrentInputText]=useState("")
-    const [authorPostReactions, setAuthorPostReactions] = useState(props.route.params.authorPostReactions);
-    
-    console.log(props.route.params.likeCount+"authe "+likeCount)
-    //setCommentCount(props.route.params.commentCount)*/
+ 
    
     
     return(
