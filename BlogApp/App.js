@@ -13,6 +13,22 @@ import ProfileScreenActivity from './Source/screens/ProfileScreen'
 import NotificationScreenActivity from './Source/screens/NotificationScreen'
 import IndividualPostScreen from './Source/screens/IndividualPost'
 import { AuthContext, AuthProvider } from "./Source/provider/AuthProvider";
+import * as firebase from 'firebase'
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBvDb9x-BbMiHxsg_YendqGfoi9P6CXfLY",
+  authDomain: "help-83b6c.firebaseapp.com",
+  //databaseURL:"https://help-83b6c-default-rtdb.firebaseio.com",
+  projectId: "help-83b6c",
+  storageBucket: "help-83b6c.appspot.com",
+  messagingSenderId: "519488680139",
+  appId: "1:519488680139:web:588fba62f8bb40a740eb4e"
+};
+
+if(!firebase.apps.length){
+  firebase.initializeApp(firebaseConfig);
+}
+
 
 const AuthStack= createStackNavigator();
 const HomeStack =createStackNavigator();

@@ -4,7 +4,8 @@ import { Input, Button } from "react-native-elements";
 import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import {AuthContext} from "../provider/AuthProvider"
 import {AuthCard} from '../shareable/customCard'
-import { storeDataJSON } from "../Function/AsyncStorageFunction";
+import * as firebase from 'firebase'
+import "firebase/firestore";
 
 
 const SignUpScreenActivity=(props) =>{
@@ -68,16 +69,36 @@ const SignUpScreenActivity=(props) =>{
                                     icon={<AntDesign name="user" size={24} color='white' />}
                                     title="  Sign Up!"
                                     buttonStyle={styles.buttonView}
-                                    onPress={function(){
-                                        let currentUser={
-                                            name:Name,
-                                            sid:SID,
-                                            email:Email,
-                                            password:Password,
+                                    onPress={()=>{
+                                        if(Name && SID && Email && Password){
+                                            firebase.auth().createUserWithEmailAndPassword(Email,Password)
+                                            .then((userCreds)=>{
+                                               
+                                                userCreds.user.updateProfile({displayName:Name});
+                                                firebase
+                                                .firestore()
+                                                
+                                                .collection('users')
+                                                .doc(userCreds.user.uid).set({
+                                                    name:Name,
+                                                    sid:SID,
+                                                    email:Email,
+                                                }).then(()=>{
+                                                    console.log("lklk")
+                                                    alert(userCreds.user.uid+"Account created successfully!")
+                                                    props.navigation.navigate("SignIn")
+                                                }).
+                                                catch((error)=>{
+                                                    alert(error)
+                                                });
+                                            }).catch((error)=>{
+                                                alert(error)
+                                            })
+
                                         }
-                                        console.log(currentUser)
-                                        storeDataJSON(Email,currentUser);
-                                        props.navigation.navigate("SignIn");
+                                        else{
+                                            alert('Files can not be empty')
+                                        }
                                     }}
                                    
                                     

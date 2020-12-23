@@ -4,10 +4,10 @@ import { Input, Button } from "react-native-elements";
 import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import {AuthContext} from "../provider/AuthProvider"
 import {AuthCard} from '../shareable/customCard'
-import { getDataJSON } from "../Function/AsyncStorageFunction";
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
+import * as firebase from 'firebase'
+import { useScreens } from "react-native-screens";
 
 
 const SignInScreenActivity=(props) =>{
@@ -53,17 +53,15 @@ const SignInScreenActivity=(props) =>{
                                     icon={<Entypo name="login" size={24} color='white' />}
                                     title="  Sign In!"
                                     buttonStyle={styles.buttonView}
-                                    onPress={async function(){
-                                        let UserData=await getDataJSON(Email);
-                                        console.log(UserData)
-                                        console.log(Email)
-                                        if(UserData.password==Password){
-                                            auth.setIsLoggedIn(true)
-                                            auth.setCurrentUser(UserData);
-                                        }
-                                        else{
-                                            alert("LogIn Failed")
-                                        }
+                                    onPress={()=>{
+                                        firebase.auth().signInWithEmailAndPassword(Email,Password)
+                                        .then((usersCreds)=>{
+                                            auth.setIsLoggedIn(true);
+                                            auth.setCurrentUser(usersCreds.user)
+                                        })
+                                        .catch((error)=>{
+                                            alert(error)
+                                        })
                                     }}
                                    
                                     

@@ -8,7 +8,8 @@ import {PostCard} from '../shareable/customCard'
 import ScreenHeader from '../shareable/ScreenHeader'
 import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import PostList from '../shareable/PostList'
-
+import * as firebase from 'firebase'
+import "firebase/firestore";
 
 const months={
     0:"January",
@@ -36,29 +37,38 @@ const HomeScreenActivity=(props)=>{
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
   const loadPosts = async () => {
-    console.log("response koro")
-    console.log(loading)
-    const response = await getDataJSON("Post");
-    
-    console.log(response)
-    console.log("response hoi nai?")
-    
-    console.log(response.length)
-    if (response.length>0) {
-      setLoading(true)
-      setPosts(response);
-     
-    }
+    setLoading(true)
+    firebase
+      .firestore()
+      .collection("posts")
+      .orderBy("created_at", "desc")
+      .onSnapshot((querySnapshot) => {
+        let temp_posts = [];
+        querySnapshot.forEach((doc) => {
+          temp_posts.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        setPosts(temp_posts);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert(error);
+      });
     
   };
     
-   
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
     
     
-      if(!loading){
-        loadPosts()
-      }
+     
         
    
     return(
@@ -90,27 +100,31 @@ const HomeScreenActivity=(props)=>{
               />
               
               <View style={styles.buttonView}>
+              
               <Button 
               borderRadius={9}
               color="#fc6a03"
               title="Post"
                 titleStyle={{color:"white"}}
                 onPress={function () {
-                    posts.reverse()
-                    let month=new Date().getMonth()
-                    let postDetails={key:posts.length+1,Email:auth.CurrentUser.email,postText:RecentPost,postDate:'Posted on '+new Date().getDate()+' '+months[month]+','+new Date().getFullYear()}
-                    
-                    
-                    let allPost=posts.copyWithin()
-                    allPost.push(postDetails)
+                  setLoading(true)
+                  console.log("dekhi")
+                  console.log(auth.CurrentUser)
+                   firebase.firestore().collection("posts").add({
+                     userId:auth.CurrentUser.uid,
+                     body:RecentPost,
+                     author:auth.CurrentUser.displayName,
+                     created_at:firebase.firestore.Timestamp.now(),
+                     likes:[],
+                     comments:[],
+                   }).then(()=>{
+                     setLoading(false)
+                     alert("Post Created")
 
-                    setPosts(allPost)
-                    
-                    posts.reverse()
-                   
-                    
-                   
-                    storeDataJSON("Post",posts)
+                   }).catch((error)=>{
+                    setLoading(false)
+                     alert(error)
+                   })
 
                     }} />
              
@@ -127,11 +141,12 @@ const HomeScreenActivity=(props)=>{
             renderItem={function({ item } ){
               //console.log("Render")
               //console.log(posts)
-              console.log(posts.length+" post length")
+
+              console.log(posts.length+" post length"+item.data.body)
              
               return (
-               
-                 <PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
+                  <Text>hello</Text>
+                 //<PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
                  
                  )
           }}

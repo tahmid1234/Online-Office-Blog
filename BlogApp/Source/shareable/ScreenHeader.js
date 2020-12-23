@@ -2,6 +2,8 @@ import React from 'react'
 import {Header} from "react-native-elements";
 import {StyleSheet} from 'react-native';
 import {AuthContext} from '../provider/AuthProvider';
+import * as  firebase from 'firebase';
+
 
 const ScreenHeader=({props})=>{
     return(
@@ -28,8 +30,14 @@ const ScreenHeader=({props})=>{
                 icon: "lock-outline",
                 color: "#fff",
                 onPress: function () {
+                 firebase.auth().signOut()
+                 .then(()=>{
                   auth.setIsLoggedIn(false);
                   auth.setCurrentUser({});
+                 })
+                 .catch((error)=>{
+                   alert(error)
+                 })
                 },
               }}
     
